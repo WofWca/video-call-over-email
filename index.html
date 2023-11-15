@@ -13,11 +13,20 @@
   </style>
 </head>
 <body>
-  <p>Warning: the video data you send is as persistent as text messages you send, so don't do anything embarassing, even if there is no one else on the call at the moment</p>
-  <p>As of 2023-11-15, sending video won't work on unmodified Delta Chat clients</p>
+  <p>Warning: the audio/video data you send is as persistent as text messages you send, so don't do anything embarassing, even if there is no one else on the call at the moment</p>
+  <p>As of 2023-11-15, sending audio/video won't work on unmodified Delta Chat clients</p>
   <p>The delay is <i>at least</i> 10 seconds, so you gotta wait a bit</p>
-  <button id="startBroadcast" type="button">▶️ Start sending my video</button>
-  <button id="stopBroadcast" disabled type="button">⏹ Stop my video</button>
+  <!-- Yep, the audio one is always disabled -->
+  <label>
+    <input id="includeAudio" type="checkbox" checked disabled></button>
+    🎤 include audio
+  </label>
+  <label>
+    <input id="includeVideo" type="checkbox" checked></button>
+    🎥 include video
+  </label>
+  <button id="startBroadcast" type="button">▶️ Start sending my media</button>
+  <button id="stopBroadcast" disabled type="button">⏹ Stop my media</button>
   <section id="videos">
     <h2>Room</h2>
   </section>

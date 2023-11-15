@@ -80,7 +80,8 @@ function init() {
   const startBroadcastButton = document.getElementById('startBroadcast');
   startBroadcastButton.addEventListener('click', () => {
     startBroadcastButton.disabled = true;
-    startBroadcast().then(stream => {
+    includeVideoCheckbox.disabled = true;
+    startBroadcast(includeVideoCheckbox.checked).then(stream => {
       stopBroadcastButton.disabled = false;
       localStream = stream;
     });
@@ -91,7 +92,11 @@ function init() {
     stopBroadcastButton.disabled = true;
     localStream.stop();
     startBroadcastButton.disabled = false;
+    includeVideoCheckbox.disabled = false;
   });
+
+  /** @type {HTMLInputElement} */
+  const includeVideoCheckbox = document.getElementById('includeVideo');
 
   handledOldMessagesP.then(() => {
     window.webxdc.sendUpdate({
@@ -120,19 +125,25 @@ function createElementForRoomMember(roomMemberName) {
   return memberSection;
 }
 
-async function startBroadcast() {
+/**
+ * @param {boolean} includeVideo
+ */
+async function startBroadcast(includeVideo) {
   const streamId = Math.random();
 
-  const localStream = new LocalCameraMediaStream(async (event) => {
-    const serializedData = await serializeData(event);
-    window.webxdc.sendUpdate({
-      payload: {
-        type: 'data',
-        streamId,
-        data: serializedData,
-      },
-    }, '');
-  });
+  const localStream = new LocalCameraMediaStream(
+    async (event) => {
+      const serializedData = await serializeData(event);
+      window.webxdc.sendUpdate({
+        payload: {
+          type: 'data',
+          streamId,
+          data: serializedData,
+        },
+      }, '');
+    },
+    includeVideo,
+  );
   await localStream.init();
   window.webxdc.sendUpdate({
     payload: {
@@ -217,24 +228,27 @@ class LocalCameraMediaStream {
   /**
    * @param {(data: MediaRecorderDataEvent) => void} onDataAvailable
    */
-  constructor(onDataAvailable) {
+  constructor(onDataAvailable, includeVideo) {
+    this._includeVideo = includeVideo;
     /** @type {typeof onDataAvailable} */
     this.onDataAvailable = onDataAvailable;
     this._stopPromise = new Promise(r => this.stop = r);
   }
   async init() {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        // frameRate: {
-        //   ideal: 5,
-        // },
-        height: {
-          ideal: 50,
-        },
-        width: {
-          ideal: 50,
-        },
-      },
+      video: this._includeVideo
+        ? {
+            // frameRate: {
+            //   ideal: 5,
+            // },
+            height: {
+              ideal: 50,
+            },
+            width: {
+              ideal: 50,
+            },
+          }
+        : false,
       audio: true,
     });
     this._stopPromise.then(() => {
