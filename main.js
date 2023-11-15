@@ -69,7 +69,7 @@ function init() {
   handledOldMessagesP.then(() => handledOldMessages = true);
 
   function addSectionForMember(roomMemberAddr, roomMemberName) {
-    const memberSection = createMemberSection(roomMemberName);
+    const memberSection = createElementForRoomMember(roomMemberName);
     roomMemberEls.set(roomMemberAddr, memberSection);
     document.getElementById('videos').appendChild(memberSection);
   }
@@ -104,7 +104,7 @@ function init() {
   });
 }
 
-function createMemberSection(roomMemberName) {
+function createElementForRoomMember(roomMemberName) {
   const memberSection = document.createElement('section');
   memberSection.classList.add('member')
 
