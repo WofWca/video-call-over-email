@@ -1,0 +1,8 @@
+{
+  "name": "webxdc-video-call",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {
+    "webxdc-types": "^1.0.1"
+  }
+}
