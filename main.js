@@ -45,7 +45,9 @@ function init() {
           setUpNewVideoDisplay(containerElement, update.payload.mimeType)
         );
 
-        containerElement.getElementsByClassName('no-video')[0].remove();
+        // Could be `null` if it's not the first time this member started
+        // a stream.
+        containerElement.getElementsByClassName('no-video')[0]?.remove();
 
         break;
       }
