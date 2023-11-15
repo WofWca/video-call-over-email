@@ -26,7 +26,7 @@ function init() {
       case 'newRoomMember': {
         addSectionForMember(
           update.payload.roomMemberAddr,
-          update.payload.roomMemberAddr
+          update.payload.roomMemberName,
         );
         break;
       }
