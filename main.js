@@ -269,6 +269,8 @@ class LocalCameraMediaStream {
     // we never send two chunks of data in the same batch, to work around
     // `appendBuffer()` throwing if it's not done processing the previous
     // chunk.
+    // Btw, the rate is now 6.6666 for testrun: `*.testrun.org`.
+    // https://github.com/deltachat/deltachat-core-rust/pull/4904
     const slicePeriodMs = 11 * 1000;
     recorder.start(slicePeriodMs);
     this._stopPromise.then(() => recorder.stop());
