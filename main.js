@@ -226,6 +226,9 @@ class LocalCameraMediaStream {
 
     const recorder = this.recorder = new MediaRecorder(stream, {
       bitsPerSecond: 128,
+      // I'm not an expert, but this codec seems to be supported by a lot
+      // of browsers. Maybe there is a better string.
+      mimeType: 'video/webm;codecs=vp8',
     });
     recorder.ondataavailable = (e) => {
       this.onDataAvailable(e);
