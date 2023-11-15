@@ -129,7 +129,6 @@ async function startBroadcast() {
         streamId,
         data: serializedData,
       },
-      info: `${window.webxdc.selfName} sent a few more frames`,
     }, '');
   });
   await localStream.init();
