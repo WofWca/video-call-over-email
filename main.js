@@ -53,11 +53,11 @@ function init() {
       }
       case 'data': {
         const sourceBufferP = incomingStreams.get(update.payload.streamId);
-        sourceBufferP.then(sourceBuffer => {
+        sourceBufferP.then(async sourceBuffer => {
           // TODO fix: if 'data' events are sent often enough, it can so happen
           // that the last `appendBuffer` has not been finished, so this one
           // will throw. Need to check `mediaSource.readyState`.
-          const deserializedData = deserializeData(update.payload.data);
+          const deserializedData = await deserializeData(update.payload.data);
           sourceBuffer.appendBuffer(deserializedData);
         })
         break;
@@ -150,12 +150,29 @@ async function startBroadcast() {
 /**
  * @param {BlobEvent} event
  */
-async function serializeData(event) {
-  const arrayBuffer = await event.data.arrayBuffer();
-  return [...(new Uint8Array(arrayBuffer))];
+async function serializeData(onDataAvailableEvent) {
+  // const arrayBuffer = await event.data.arrayBuffer();
+  // return [...(new Uint8Array(arrayBuffer))];
+
+  const reader = new FileReader();
+  return new Promise(r => {
+    reader.onload = (fileReaderEvent) => {
+      r(fileReaderEvent.target.result);
+    }
+    reader.readAsDataURL(onDataAvailableEvent.data);
+  });
 }
-function deserializeData(serializedData) {
-  return new Uint8Array(serializedData);
+async function deserializeData(serializedData) {
+  // return new Uint8Array(serializedData);
+
+  // WTF?? If I remove this it stops working? Does `fetch` give different
+  // `arrayBuffer` for different `mimeType`?
+  const split = serializedData.split(',');
+  serializedData =
+    "data:application/octet-binary;base64," + split[split.length - 1];
+
+  // Btw, the data URL could be used directly as `video.src`.
+  return fetch(serializedData).then(r => r.arrayBuffer());
 }
 
 /**
