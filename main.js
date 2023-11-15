@@ -10,14 +10,11 @@ function init() {
   const incomingStreams = new Map();
 
   let handledOldMessages = false;
-  window.webxdc.setUpdateListener(update => {
+  const handledOldMessagesP = window.webxdc.setUpdateListener(update => {
     // Do nothing until we start receiving messages that arrived after
     // the app was opened.
     // Why? Because it's a prototype.
     if (!handledOldMessages) {
-      if (update.serial === update.max_serial) {
-        handledOldMessages = true;
-      }
       return;
     }
 
@@ -44,6 +41,7 @@ function init() {
         throw new Error('Unknown message type:' + update.payload.type);
     }
   }, 0);
+  handledOldMessagesP.then(() => handledOldMessages = true);
 
   /** @type {undefined | Awaited<ReturnType<typeof startBroadcast>>} */
   let localStream;
