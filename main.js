@@ -171,8 +171,11 @@ class LocalCameraMediaStream {
       this.onDataAvailable(e);
     }
 
-    // Slightly below the throttle period of Delta Chat.
-    const slicePeriodMs = 5 * 1000;
+    // Slightly above the sustained send rate of Delta Chat, so that
+    // we never send two chunks of data in the same batch, to work around
+    // `appendBuffer()` throwing if it's not done processing the previous
+    // chunk.
+    const slicePeriodMs = 11 * 1000;
     recorder.start(slicePeriodMs);
     this._stopPromise.then(() => recorder.stop());
 
