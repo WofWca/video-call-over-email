@@ -6,8 +6,12 @@
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
+  // Keep in mind that the same member could connect from two different devices.
   /** @type {Map<number, ReturnType<typeof setUpNewVideoDisplay>>} */
   const incomingStreams = new Map();
+  /** @typedef {string} RoomMemberAddr */
+  /** @type {Map<RoomMemberAddr, HTMLElement>} */
+  const roomMemberEls = new Map();
 
   let handledOldMessages = false;
   const handledOldMessagesP = window.webxdc.setUpdateListener(update => {
@@ -19,11 +23,30 @@ function init() {
     }
 
     switch (update.payload.type) {
+      case 'newRoomMember': {
+        addSectionForMember(
+          update.payload.roomMemberAddr,
+          update.payload.roomMemberAddr
+        );
+        break;
+      }
       case 'newStream': {
+        let containerElement = roomMemberEls.get(update.payload.roomMemberAddr);
+        if (!containerElement) {
+          addSectionForMember(
+            update.payload.roomMemberAddr,
+            update.payload.roomMemberAddr // Yes, it should be member name.
+          );
+          containerElement = roomMemberEls.get(update.payload.roomMemberAddr);
+        }
+
         incomingStreams.set(
           update.payload.streamId,
-          setUpNewVideoDisplay(update.payload.mimeType)
+          setUpNewVideoDisplay(containerElement, update.payload.mimeType)
         );
+
+        containerElement.getElementsByClassName('no-video')[0].remove();
+
         break;
       }
       case 'data': {
@@ -43,6 +66,12 @@ function init() {
   }, 0);
   handledOldMessagesP.then(() => handledOldMessages = true);
 
+  function addSectionForMember(roomMemberAddr, roomMemberName) {
+    const memberSection = createMemberSection(roomMemberName);
+    roomMemberEls.set(roomMemberAddr, memberSection);
+    document.getElementById('videos').appendChild(memberSection);
+  }
+
   /** @type {undefined | Awaited<ReturnType<typeof startBroadcast>>} */
   let localStream;
   /** @type {HTMLButtonElement} */
@@ -61,6 +90,32 @@ function init() {
     localStream.stop();
     startBroadcastButton.disabled = false;
   });
+
+  handledOldMessagesP.then(() => {
+    window.webxdc.sendUpdate({
+      payload: {
+        type: 'newRoomMember',
+        roomMemberName: window.webxdc.selfName,
+        roomMemberAddr: window.webxdc.selfAddr,
+      },
+    }, '');
+  });
+}
+
+function createMemberSection(roomMemberName) {
+  const memberSection = document.createElement('section');
+  memberSection.classList.add('member')
+
+  const nameEl = document.createElement('h3');
+  nameEl.textContent = roomMemberName;
+  memberSection.appendChild(nameEl);
+
+  const noVideoYetEl = document.createElement('p');
+  noVideoYetEl.classList.add('no-video');
+  noVideoYetEl.textContent = 'The member hasn\'t started a broadcast yet';
+  memberSection.appendChild(noVideoYetEl);
+
+  return memberSection;
 }
 
 async function startBroadcast() {
@@ -81,6 +136,7 @@ async function startBroadcast() {
   window.webxdc.sendUpdate({
     payload: {
       type: 'newStream',
+      roomMemberAddr: window.webxdc.selfAddr,
       streamId,
       mimeType: localStream.recorder.mimeType,
     },
@@ -101,7 +157,11 @@ function deserializeData(serializedData) {
   return new Uint8Array(serializedData);
 }
 
-async function setUpNewVideoDisplay(mimeType) {
+/**
+ * @param {HTMLElement} containerElement
+ * @param {string} mimeType
+ */
+async function setUpNewVideoDisplay(containerElement, mimeType) {
   const mediaSource = new MediaSource();
 
   const video = document.createElement('video');
@@ -118,8 +178,7 @@ async function setUpNewVideoDisplay(mimeType) {
   })
   const sourceBuffer = mediaSource.addSourceBuffer(mimeType);
 
-  const videosContainer = document.getElementById('videos');
-  videosContainer.appendChild(video);
+  containerElement.appendChild(video);
 
   // TODO a way to clean up stuff, close `MediaSource`.
   return sourceBuffer;
