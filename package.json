@@ -2,6 +2,7 @@
   "name": "webxdc-video-call",
   "version": "1.0.0",
   "main": "main.js",
+  "license": "Apache-2.0",
   "devDependencies": {
     "webxdc-types": "^1.0.1"
   }
