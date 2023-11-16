@@ -2,6 +2,7 @@
   "name": "webxdc-video-call",
   "license": "Apache-2.0",
   "devDependencies": {
+    "eruda": "^3.0.1",
     "webxdc-types": "^1.0.1"
   }
 }
