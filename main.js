@@ -56,7 +56,7 @@ function init() {
         sourceBufferP.then(async sourceBuffer => {
           // TODO fix: if 'data' events are sent often enough, it can so happen
           // that the last `appendBuffer` has not been finished, so this one
-          // will throw. Need to check `mediaSource.readyState`.
+          // will throw. Need to check `sourceBuffer.updating`.
           const deserializedData = await deserializeData(update.payload.data);
           sourceBuffer.appendBuffer(deserializedData);
         })
