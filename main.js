@@ -183,6 +183,9 @@ async function deserializeData(serializedData) {
     "data:application/octet-binary;base64," + split[split.length - 1];
 
   // Btw, the data URL could be used directly as `video.src`.
+  // Actually - no.
+  // https://w3c.github.io/mediacapture-record/#mediarecorder-methods :
+  // > the individual Blobs need not be playable
   return fetch(serializedData).then(r => r.arrayBuffer());
 }
 
