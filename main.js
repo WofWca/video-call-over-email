@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', init);
 
 function init() {
   // Keep in mind that the same member could connect from two different devices.
-  /** @type {Map<number, ReturnType<typeof setUpNewVideoDisplay>>} */
+  /** @typedef {string} StreamId */
+  /** @type {Map<StreamId, ReturnType<typeof setUpNewVideoDisplay>>} */
   const incomingStreams = new Map();
   /** @typedef {string} RoomMemberAddr */
   /** @type {Map<RoomMemberAddr, HTMLElement>} */
