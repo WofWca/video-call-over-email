@@ -15,8 +15,7 @@ function init() {
 
   let handledOldMessages = false;
   const handledOldMessagesP = window.webxdc.setUpdateListener(update => {
-    // Do nothing until we start receiving messages that arrived after
-    // the app was opened.
+    // Only handle messages that arrived after the app was opened.
     // Why? Because it's a prototype.
     if (!handledOldMessages) {
       return;
