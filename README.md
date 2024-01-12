@@ -14,11 +14,13 @@ As was said, this is a [webxdc](https://webxdc.org) app. It requires a webxdc-su
 
 However, as of 2023-11-16, sending audio/video won't work on unmodified versions of Delta Chat, but [this may change](https://support.delta.chat/t/allow-access-to-camera-geolocation-other-web-apis/2446?u=wofwca) in the near future.
 
-_Receiving_ video does work on regular Delta Chat.
+_Receiving_ video _does_ work on regular Delta Chat,
+so you can play around with the app
+without having to convince your friends to modify their Delta Chat.
 
 ### Modifying Delta Chat
 
-Below are instructions on how to modify Delta Chat. But make sure **not to launch any webxdc apps** that you don't trust on the modified version of Delta Chat as it is **insecure**. Tested on Delta Chat 1.40.4.
+Below are instructions on how to modify Delta Chat. But make sure **not to launch any webxdc apps** that you don't trust on the modified version of Delta Chat as it is **insecure**. These instructions were tested on Delta Chat 1.40.4.
 
 1. Download [Delta Chat Desktop](https://delta.chat/).
 2. Find the `DeltaChat/resources/app.asar` file in the app folder.
@@ -73,4 +75,4 @@ When we receive data, deserialize it and display it using [Media Source Extensio
 
 ## Web demo (no email involved)
 
-If you just want to see how the app feels, without actually communicating with anyone using email, go to <https://wofwca.github.io/video-call-over-email/> .
+If you just want to see how the app feels, without actually using email, go to <https://wofwca.github.io/video-call-over-email/> .
