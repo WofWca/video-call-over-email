@@ -29,7 +29,7 @@ Below are instructions on how to modify Delta Chat. But make sure **not to launc
 5. Find the line
 
     ```javascript
-    const logPermissionRequest = (permission) => {
+    const permission_handler = (permission) => {
     ```
 
     and add a line
