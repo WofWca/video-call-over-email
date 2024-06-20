@@ -201,6 +201,9 @@ async function setUpNewVideoDisplay(containerElement, mimeType) {
   // video.srcObject = mediaSource;
   // TODO revokeObjectURL
   video.src = URL.createObjectURL(mediaSource);
+  // TODO this fails if the user hasn't interacted with the page.
+  // That is they won't see the video play.
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play#usage_notes
   video.play();
 
   await new Promise(r => {
