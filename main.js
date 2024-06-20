@@ -87,6 +87,7 @@ function init() {
     });
   });
 
+  /** @type {HTMLButtonElement} */
   const stopBroadcastButton = document.getElementById('stopBroadcast');
   stopBroadcastButton.addEventListener('click', () => {
     stopBroadcastButton.disabled = true;
@@ -159,7 +160,7 @@ async function startBroadcast(includeVideo) {
 }
 
 /**
- * @param {BlobEvent} event
+ * @param {BlobEvent} onDataAvailableEvent
  */
 async function serializeData(onDataAvailableEvent) {
   // const arrayBuffer = await event.data.arrayBuffer();
