@@ -82,16 +82,16 @@ function init() {
     document.getElementById('videos').appendChild(memberSection);
   }
 
-  /** @type {undefined | Awaited<ReturnType<typeof startBroadcast>>} */
-  let localStream;
+  /** @type {undefined | ReturnType<typeof startBroadcast>} */
+  let localStreamP;
   /** @type {HTMLButtonElement} */
   const startBroadcastButton = document.getElementById('startBroadcast');
   startBroadcastButton.addEventListener('click', () => {
     startBroadcastButton.disabled = true;
     includeVideoCheckbox.disabled = true;
-    startBroadcast(includeVideoCheckbox.checked).then(stream => {
+    localStreamP = startBroadcast(includeVideoCheckbox.checked)
+    localStreamP.then(stream => {
       stopBroadcastButton.disabled = false;
-      localStream = stream;
     });
   });
 
@@ -99,7 +99,8 @@ function init() {
   const stopBroadcastButton = document.getElementById('stopBroadcast');
   stopBroadcastButton.addEventListener('click', () => {
     stopBroadcastButton.disabled = true;
-    localStream.stop();
+    localStreamP?.then(stream => stream.stop());
+    localStreamP = undefined;
     startBroadcastButton.disabled = false;
     includeVideoCheckbox.disabled = false;
   });
