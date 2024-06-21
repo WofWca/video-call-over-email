@@ -36,6 +36,18 @@ function init() {
           update.payload.roomMemberAddr,
           update.payload.roomMemberName,
         );
+
+        // Restart the stream, because `appendBuffer` apparently
+        // doesn't work if previous buffers are dropped.
+        localStreamP
+          ?.then(stream => stream.stop())
+          .then(() => {
+            // IDK if `setTimeout` is needed.
+            setTimeout(() => {
+              localStreamP = startBroadcast(includeVideoCheckbox.checked)
+            })
+          })
+
         break;
       }
       case 'newStream': {
