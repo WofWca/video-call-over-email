@@ -120,6 +120,15 @@ function init() {
   /** @type {HTMLInputElement} */
   const includeVideoCheckbox = document.getElementById('includeVideo');
 
+  /** @type {HTMLInputElement} */
+  const startOthersStreamsButton = document.getElementById('startOthersStreams');
+  startOthersStreamsButton.addEventListener('click', () => {
+    for (const video of document.getElementsByTagName('video')) {
+      video.play();
+      video.currentTime = video.buffered.end(0)
+    }
+  })
+
   handledOldMessagesP.then(() => {
     window.webxdc.sendUpdate({
       payload: {
@@ -222,7 +231,7 @@ async function setUpNewVideoDisplay(containerElement, mimeType) {
   // video.srcObject = mediaSource;
   // TODO revokeObjectURL
   video.src = URL.createObjectURL(mediaSource);
-  // TODO this fails if the user hasn't interacted with the page.
+  // this fails if the user hasn't interacted with the page (autoplay).
   // That is they won't see the video play.
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play#usage_notes
   video.play();
