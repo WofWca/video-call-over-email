@@ -4,6 +4,8 @@
 
 A [webxdc](https://webxdc.org) app for actual video calls over actual email (albeit with 15-second ping (but [it may improve soon](https://github.com/deltachat/deltachat-core-rust/pull/4904))).
 
+Also see the [fork, "A webxdc app for P2P real-time video calls"](https://github.com/WofWca/webxdc-video-call) (which is _not_ email-based).
+
 ![A simplistic video call app UI](./screenshot.jpg)
 
 This is just a prototype.
