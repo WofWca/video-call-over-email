@@ -19,6 +19,9 @@ const DATA_SEND_PERIOD =
     : 10 * 1000);
 
 function init() {
+  document.getElementById('currentOneWayDelay').innerText =
+    (DATA_SEND_PERIOD / 1000).toFixed(3);
+
   // Keep in mind that the same member could connect from two different devices.
   /** @typedef {string} StreamId */
   /** @type {Map<StreamId, ReturnType<typeof setUpNewVideoDisplay>>} */
