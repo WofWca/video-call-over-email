@@ -1,6 +1,7 @@
 //@ts-check
 // Copy-pasted and modified https://codepen.io/miguelao/pen/qRXrKR
 
+import execWhenSourceBufferReady from './node_modules/when-sourcebuffer-ready/index.js'
 /** @typedef {import('@webxdc/types/global')} */
 
 document.addEventListener('DOMContentLoaded', init);
@@ -82,11 +83,17 @@ function init() {
       case 'data': {
         const sourceBufferP = incomingStreams.get(update.payload.streamId);
         sourceBufferP.then(async sourceBuffer => {
-          // TODO fix: if 'data' events are sent often enough, it can so happen
-          // that the last `appendBuffer` has not been finished, so this one
-          // will throw. Need to check `sourceBuffer.updating`.
+          // TODO fix: updates can be received out of order,
+          // and also a newer `deserializeData` can finish before an older one,
+          // which would result in an error if sourceBuffer doesn't support
+          // out-of-order `appendBuffer()` operations.
           const deserializedData = await deserializeData(update.payload.data);
-          sourceBuffer.appendBuffer(deserializedData);
+          execWhenSourceBufferReady(
+            sourceBuffer,
+            () => {
+              sourceBuffer.appendBuffer(deserializedData)
+            }
+          );
         })
         break;
       }

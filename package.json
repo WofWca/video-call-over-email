@@ -2,7 +2,10 @@
   "name": "webxdc-video-call",
   "license": "Apache-2.0",
   "devDependencies": {
-    "eruda": "^3.0.1",
-    "@webxdc/types": "github:webxdc/webxdc-types"
+    "@webxdc/types": "github:webxdc/webxdc-types",
+    "eruda": "^3.0.1"
+  },
+  "dependencies": {
+    "when-sourcebuffer-ready": "^1.0.1"
   }
 }
