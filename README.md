@@ -3,6 +3,7 @@
 <!-- Yep, actual video call over actual email. -->
 
 A [webxdc](https://webxdc.org) app for actual video calls over actual email (albeit with 15-second ping (but [it may improve soon](https://github.com/deltachat/deltachat-core-rust/pull/4904))).
+
 Update 2025-06: the ratelimit got decreased down to 1 email per second for Chatmail servers (nine.testrun.org), so now one-way delay is ~3 seconds (and the ping is ~6 seconds)!
 
 Also see the [fork, "A webxdc app for P2P real-time video calls"](https://github.com/WofWca/webxdc-video-call) (which is _not_ email-based).
