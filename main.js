@@ -5,10 +5,14 @@
 
 document.addEventListener('DOMContentLoaded', init);
 
-// Slightly above the sustained send rate of Delta Chat, so that
-// we never send two chunks of data in the same batch, to work around
-// `appendBuffer()` throwing if it's not done processing the previous
-// chunk.
+// Slightly above the sustained send rate of Delta Chat,
+// a simple workaround.
+// If we tried to `sendUpdate()` more often than Delta Chat
+// actually sending actual emails, Delta Chat would batch
+// these `sendUpdate()` calls into one email.
+// But then we'd call `appendBuffer()` twice rapidly, and the second call
+// would throw if it's not done processing the previous chunk.
+//
 // Btw, the rate is now 6.6666 for testrun: `*.testrun.org`.
 // https://github.com/deltachat/deltachat-core-rust/pull/4904
 const DATA_SEND_PERIOD = 11 * 1000;
