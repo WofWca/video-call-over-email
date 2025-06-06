@@ -23,27 +23,27 @@ without having to convince your friends to modify their Delta Chat.
 
 ### Modifying Delta Chat
 
-Below are instructions on how to modify Delta Chat. But make sure **not to launch any webxdc apps** that you don't trust on the modified version of Delta Chat as it is **insecure**. These instructions were tested on Delta Chat 1.40.4.
+Below are instructions on how to modify Delta Chat. But make sure **not to launch any webxdc apps** that you don't trust on the modified version of Delta Chat as it is **insecure**. These instructions were tested on Delta Chat 1.58.0.
 
 1. Download [Delta Chat Desktop](https://delta.chat/).
 2. Find the `DeltaChat/resources/app.asar` file in the app folder.
-3. Open it as a ZIP file.
-4. Open the `tsc-dist/main/deltachat/webxdc.js` file inside the archive.
-5. Find the line
+3. Create a backup copy of the `app.asar` file.
+3. Open the original `app.asar` file as a ZIP file.
+4. Open the `bundle_out/index.js` file inside the archive.
+5. Find and replace
 
-    ```javascript
-    const permission_handler = (permission) => {
-    ```
+   ```javascript
+   ["pointerLock", "fullscreen"]
+   ```
 
-    and add a line
+   with
 
-    ```javascript
-    return true; // ADDED BY ME
-    ```
+   ```javascript
+   [/* ADDED BY ME */ "media", "pointerLock", "fullscreen"]
+   ```
 
-    right below it.
 6. Save the modified app.asar file.
-7. After you're done playing around with this app, make sure to remove the line you added, or simply reinstall Delta Chat.
+7. After you're done playing around with this app, replace the modified `app.asar` file with the backup copy you made, or simply reinstall Delta Chat.
 
 ### Running the app
 
