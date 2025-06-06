@@ -261,6 +261,23 @@ async function setUpNewVideoDisplay(containerElement, mimeType) {
 
   containerElement.appendChild(video);
 
+  // Clean up, don't indefinitely store video data in memory.
+  setInterval(() => {
+    execWhenSourceBufferReady(sourceBuffer, () => {
+      if (sourceBuffer.buffered.length > 1) {
+        console.warn(
+          "Expected only one buffered range, memory will leak",
+          sourceBuffer.buffered
+        );
+      }
+      const toRemoveUpTo = sourceBuffer.buffered.end(0) - 30;
+      if (toRemoveUpTo <= 0) {
+        return;
+      }
+      sourceBuffer.remove(0, toRemoveUpTo);
+    });
+  }, 5000);
+
   // TODO a way to clean up stuff, close `MediaSource`.
   return sourceBuffer;
 }
