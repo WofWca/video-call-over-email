@@ -1,7 +1,7 @@
 //@ts-check
 // Copy-pasted and modified https://codepen.io/miguelao/pen/qRXrKR
 
-/** @typedef {import('webxdc-types/global')} */
+/** @typedef {import('@webxdc/types/global')} */
 
 document.addEventListener('DOMContentLoaded', init);
 
