@@ -12,10 +12,11 @@ document.addEventListener('DOMContentLoaded', init);
 // these `sendUpdate()` calls into one email.
 // But then we'd call `appendBuffer()` twice rapidly, and the second call
 // would throw if it's not done processing the previous chunk.
-//
-// Btw, the rate is now 6.6666 for testrun: `*.testrun.org`.
-// https://github.com/deltachat/deltachat-core-rust/pull/4904
-const DATA_SEND_PERIOD = 11 * 1000;
+const DATA_SEND_PERIOD =
+  1.1 *
+  (window.webxdc.sendUpdateInterval != undefined
+    ? window.webxdc.sendUpdateInterval
+    : 10 * 1000);
 
 function init() {
   // Keep in mind that the same member could connect from two different devices.
