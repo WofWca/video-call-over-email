@@ -113,13 +113,20 @@ function init() {
   let localStreamP;
   /** @type {HTMLButtonElement} */
   const startBroadcastButton = document.getElementById('startBroadcast');
-  startBroadcastButton.addEventListener('click', () => {
+  startBroadcastButton.addEventListener('click', async () => {
     startBroadcastButton.disabled = true;
     includeVideoCheckbox.disabled = true;
-    localStreamP = startBroadcast(includeVideoCheckbox.checked)
-    localStreamP.then(stream => {
-      stopBroadcastButton.disabled = false;
-    });
+    try {
+      localStreamP = startBroadcast(includeVideoCheckbox.checked)
+      await localStreamP
+    } catch (err) {
+      console.error(err)
+      startBroadcastButton.disabled = false;
+      includeVideoCheckbox.disabled = false;
+
+      return
+    }
+    stopBroadcastButton.disabled = false;
   });
 
   /** @type {HTMLButtonElement} */
