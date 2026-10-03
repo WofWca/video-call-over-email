@@ -104,6 +104,10 @@ function init() {
   handledOldMessagesP.then(() => handledOldMessages = true);
 
   function addSectionForMember(roomMemberAddr, roomMemberName) {
+    if (roomMemberEls.has(roomMemberAddr)) {
+      console.log('Already have a section for member', roomMemberAddr, roomMemberName)
+      return;
+    }
     const memberSection = createElementForRoomMember(roomMemberName);
     roomMemberEls.set(roomMemberAddr, memberSection);
     document.getElementById('videos').appendChild(memberSection);
