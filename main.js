@@ -82,7 +82,13 @@ function init() {
       }
       case 'data': {
         const sourceBufferP = incomingStreams.get(update.payload.streamId);
-        sourceBufferP.then(async sourceBuffer => {
+        // Need to handle because some WebXDC environments spaz out
+        // if the `setUpdateListener` handler throws.
+        if (sourceBufferP == undefined) {
+          console.warn("received 'data' message, but have no incoming stream, maybe the stream started before we opened the app")
+          return
+        }
+        sourceBufferP?.then(async sourceBuffer => {
           // TODO fix: updates can be received out of order,
           // and also a newer `deserializeData` can finish before an older one,
           // which would result in an error if sourceBuffer doesn't support
